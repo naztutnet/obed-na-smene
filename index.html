@@ -1,0 +1,762 @@
+<title>Обед на смене</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700;800&display=swap">
+<style>
+:root{
+  --w:#FFFFFF; --bg:#FFFFFF; --ink:#0A0A0B;
+  --g1:#8A8A8E; --g2:#B4B4B9;
+  --line:#E7E7EA; --line-s:#F1F1F3; --fill:#F5F5F7;
+  --ok:#12A150; --warn:#A8720C; --hot:#DE3B26;
+  --r:8px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --w:#0B0B0C; --bg:#0B0B0C; --ink:#F4F4F6;
+    --g1:#8E8E93; --g2:#5C5C61;
+    --line:#26262A; --line-s:#1B1B1E; --fill:#161618;
+    --ok:#37C871; --warn:#D9A339; --hot:#FF6A52;
+  }
+}
+:root[data-theme="dark"]{
+  --w:#0B0B0C; --bg:#0B0B0C; --ink:#F4F4F6;
+  --g1:#8E8E93; --g2:#5C5C61;
+  --line:#26262A; --line-s:#1B1B1E; --fill:#161618;
+  --ok:#37C871; --warn:#D9A339; --hot:#FF6A52;
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font-family:"Golos Text","Segoe UI",system-ui,sans-serif;
+  font-size:15px; line-height:1.45; -webkit-font-smoothing:antialiased;
+  font-variant-numeric:tabular-nums;
+}
+h1,h2,h3{margin:0; font-weight:600; letter-spacing:-.015em; text-wrap:balance}
+button{font:inherit; color:inherit; background:none; border:0; cursor:pointer}
+input{font:inherit; color:inherit}
+:focus-visible{outline:2px solid var(--ink); outline-offset:2px; border-radius:10px}
+
+/* ---------- шапка ---------- */
+.bar{position:sticky; top:0; z-index:40; background:var(--bg); border-bottom:1px solid var(--line)}
+.bar-in{max-width:1120px; margin:0 auto; padding:10px 20px; display:flex; align-items:center; gap:10px 14px; flex-wrap:wrap}
+.brand{font-weight:600; font-size:15px; letter-spacing:-.02em; margin-right:auto}
+.brand span{color:var(--g2); font-weight:500}
+.pills{display:flex; gap:6px}
+.pill{
+  padding:7px 15px; border-radius:999px; border:1px solid var(--line);
+  font-size:13.5px; font-weight:500; color:var(--g1); white-space:nowrap; background:var(--bg);
+}
+.pill:hover{color:var(--ink)}
+.pill[aria-pressed="true"]{border:1.5px solid var(--ink); color:var(--ink); font-weight:600; padding:6.5px 15px}
+.ic{width:34px; height:34px; border-radius:999px; border:1px solid var(--line); display:grid; place-items:center; color:var(--ink)}
+.ic:hover{border-color:var(--g2)}
+.ic svg{width:16px; height:16px; fill:none; stroke:currentColor; stroke-width:1.7; stroke-linecap:round; stroke-linejoin:round}
+
+main{padding:22px 20px 120px}
+.col{max-width:540px; margin:0 auto}
+.wide{max-width:1120px; margin:0 auto}
+
+.tt{margin-bottom:20px}
+.tt h1{font-size:32px; font-weight:600; line-height:1.1}
+.tt p{margin:5px 0 0; color:var(--g1); font-size:15px}
+.tt .note{margin-top:12px; font-size:13.5px; color:var(--g1); line-height:1.5}
+.tt .note b{color:var(--ink); font-weight:600}
+
+/* ---------- плашки ---------- */
+.tiles{display:grid; gap:10px; margin-bottom:22px}
+.tiles.one{grid-template-columns:1fr}
+.tiles.two{grid-template-columns:1fr 1fr}
+.tiles.four{grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
+.tile{border:1px solid var(--line); border-radius:var(--r); padding:14px 16px 15px}
+.tile.lead{border:2px solid var(--ink); padding:13px 15px 14px}
+.tile .k{font-size:13.5px; color:var(--g1)}
+.tile .v{font-size:28px; font-weight:500; letter-spacing:-.02em; line-height:1.15; margin-top:2px}
+.tile.ok .v{color:var(--ok)} .tile.wn .v{color:var(--warn)} .tile.ht .v{color:var(--hot)}
+
+.hd{display:flex; align-items:baseline; gap:12px; margin:26px 0 12px}
+.hd h2{font-size:20px; font-weight:600}
+.hd .c{margin-left:auto; font-size:14px; color:var(--g1)}
+.frow{display:flex; gap:7px; flex-wrap:wrap; margin-bottom:11px}
+
+/* ---------- список ---------- */
+.list{border:1px solid var(--line); border-radius:var(--r); overflow:hidden}
+.grp{padding:13px 16px 3px; font-size:12.5px; font-weight:600; color:var(--g2); letter-spacing:.02em; text-transform:uppercase; border-top:1px solid var(--line-s)}
+.list > .grp:first-child{border-top:0}
+.row{display:flex; align-items:center; gap:14px; padding:13px 16px; border-top:1px solid var(--line-s)}
+.grp + .row{border-top:0}
+.row .t{flex:1; min-width:0}
+.ico{width:38px; height:38px; border-radius:7px; border:1px solid var(--line); display:grid; place-items:center; flex:none; color:var(--g1)}
+.ico svg{width:20px; height:20px; fill:none; stroke:currentColor; stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round}
+.prow .ico{margin-right:-2px}
+.row .n{font-weight:500; font-size:15.5px; line-height:1.3}
+.row .s{font-size:13px; color:var(--g1); margin-top:1px}
+.mark{font-size:12px; font-weight:600; color:var(--g1); border:1px solid var(--line); border-radius:999px; padding:1px 8px; margin-left:7px; vertical-align:1.5px}
+.rest{font-size:13px; color:var(--g1); white-space:nowrap}
+.rest.low{color:var(--warn)} .rest.out{color:var(--hot)}
+.plus{
+  width:32px; height:32px; border-radius:999px; border:1.5px solid var(--ink); flex:none;
+  font-size:19px; font-weight:500; display:grid; place-items:center; line-height:0; padding-bottom:2px;
+}
+.plus:hover:not(:disabled){background:var(--ink); color:var(--bg)}
+.plus:disabled{border-color:var(--line); color:var(--g2); cursor:not-allowed}
+
+.stat{font-size:12.5px; font-weight:600; border-radius:999px; padding:4px 12px; border:1px solid; white-space:nowrap}
+.stat.new{color:var(--hot)} .stat.ready{color:var(--warn)} .stat.done{color:var(--ok)}
+
+/* строки заказа */
+.oline{display:flex; align-items:center; gap:12px; padding:13px 16px; border-top:1px solid var(--line-s)}
+.list > .oline:first-child{border-top:0}
+.oline .t{flex:1; min-width:0}
+.oline .n{font-weight:500; font-size:15px}
+.oline .to{font-size:13.5px; margin-top:2px}
+.oline .to b{font-weight:600}
+.oline .to .me{color:var(--ok)}
+.oline .to .dep{color:var(--g1); font-weight:400}
+.oline .to .nt{color:var(--warn)}
+.x{width:30px; height:30px; border-radius:999px; color:var(--g2); font-size:18px; display:grid; place-items:center; flex:none; line-height:0; padding-bottom:2px}
+.x:hover{background:var(--fill); color:var(--ink)}
+.empty{padding:18px 16px; color:var(--g1); font-size:14px; line-height:1.55}
+
+/* ---------- кнопки ---------- */
+.btn{
+  display:inline-flex; align-items:center; justify-content:center; gap:8px;
+  background:var(--ink); color:var(--bg); border-radius:999px; padding:13px 24px;
+  font-weight:500; font-size:15px; letter-spacing:-.01em;
+}
+.btn:hover{opacity:.86}
+.btn:disabled{background:var(--fill); color:var(--g2); cursor:not-allowed}
+.btn.w{width:100%}
+.btn.line{background:var(--bg); color:var(--ink); border:1.5px solid var(--ink)}
+.btn.line:hover{background:var(--fill); opacity:1}
+.btn.soft{background:var(--bg); color:var(--g1); border:1px solid var(--line)}
+.btn.soft:hover{color:var(--ink); border-color:var(--g2); opacity:1}
+
+.dock{
+  position:fixed; left:0; right:0; bottom:0; z-index:50;
+  background:var(--bg); border-top:1px solid var(--line);
+}
+.dock-in{max-width:540px; margin:0 auto; padding:12px 20px 16px; display:flex; align-items:center; gap:14px}
+.dock .t{flex:1; min-width:0}
+.dock .t b{display:block; font-weight:600; font-size:14.5px}
+.dock .t span{display:block; font-size:13px; color:var(--g1); white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+
+/* ---------- шторка ---------- */
+.scrim{position:fixed; inset:0; background:rgba(10,10,11,.42); z-index:60; display:grid; place-items:end center}
+.scrim[hidden]{display:none}
+.sheet{width:100%; max-width:540px; background:var(--bg); border-radius:12px 12px 0 0; max-height:92vh; display:flex; flex-direction:column; overflow:hidden; border:1px solid var(--line); border-bottom:0}
+.sh-t{padding:9px 20px 16px}
+.grab{width:36px; height:4px; border-radius:999px; background:var(--line); margin:0 auto 15px}
+.sh-t .k{font-size:13px; color:var(--g1)}
+.sh-t h3{font-size:22px; font-weight:600; margin-top:3px}
+.sh-t p{margin:9px 0 0; font-size:13.5px; color:var(--g1); line-height:1.5}
+.sh-m{padding:0 20px; overflow-y:auto; flex:1}
+.sh-b{padding:14px 20px 20px; border-top:1px solid var(--line); display:flex; flex-direction:column; gap:9px}
+.inp{
+  width:100%; padding:12px 16px; border-radius:999px; border:1px solid var(--line);
+  background:var(--bg); color:var(--ink); font-size:14.5px;
+}
+.inp::placeholder{color:var(--g2)}
+.inp:focus{border-color:var(--ink); outline:none}
+.who{display:flex; align-items:center; gap:13px; padding:12px 2px; border-top:1px solid var(--line-s); cursor:pointer}
+.who input{position:absolute; opacity:0; width:0; height:0}
+.who .nm{flex:1; min-width:0}
+.who .nm b{display:block; font-weight:500; font-size:15px; line-height:1.3}
+.who .nm span{display:block; font-size:13px; color:var(--g1)}
+.tick{width:22px; height:22px; border-radius:999px; border:1.5px solid var(--line); flex:none; display:grid; place-items:center}
+.who input:checked ~ .tick{border-color:var(--ink); background:var(--ink)}
+.who input:checked ~ .tick::after{content:""; width:8px; height:8px; border-radius:999px; background:var(--bg)}
+.who input:focus-visible ~ .tick{outline:2px solid var(--ink); outline-offset:2px}
+.who.self{border-top:0}
+.sublbl{padding:20px 0 9px; font-size:12.5px; font-weight:600; color:var(--g2); text-transform:uppercase; letter-spacing:.02em}
+
+/* ---------- сетка кухни ---------- */
+.grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:12px; align-items:stretch}
+.tk{border:1px solid var(--line); border-radius:var(--r); display:flex; flex-direction:column; overflow:hidden}
+.tk.s-done{opacity:.45}
+.tk-h{display:flex; align-items:flex-start; gap:12px; padding:15px 16px 12px}
+.tk-h .t{flex:1; min-width:0}
+.tk-h h3{font-size:17px; font-weight:600}
+.tk-h .r{font-size:13px; color:var(--g1); margin-top:1px}
+.tk .via{padding:0 16px 11px; font-size:13.5px; color:var(--g1)}
+.tk .via b{color:var(--ink); font-weight:600}
+.tk ul{list-style:none; margin:0; padding:0; flex:1; border-top:1px solid var(--line-s)}
+.tk li{padding:11px 16px; border-top:1px solid var(--line-s); font-size:15px}
+.tk li:first-child{border-top:0}
+.tk li .nt{display:block; font-size:13px; color:var(--warn); margin-top:2px}
+.tk-f{display:flex; gap:8px; padding:12px 16px 14px; border-top:1px solid var(--line-s)}
+.tk-f button{flex:1; padding:9px; border-radius:999px; border:1px solid var(--line); font-size:13.5px; font-weight:500; color:var(--g1)}
+.tk-f button:hover{border-color:var(--g2); color:var(--ink)}
+.tk-f button.on{border:1.5px solid var(--ok); color:var(--ok); font-weight:600; padding:8.5px}
+.tk-f button.on.wn{border-color:var(--warn); color:var(--warn)}
+
+.prow{display:flex; align-items:center; gap:16px; padding:14px 16px; border-top:1px solid var(--line-s)}
+.list > .prow:first-child{border-top:0}
+.prow .n{flex:1; font-weight:500; font-size:15.5px}
+.prow .nt{font-size:13px; color:var(--warn); font-weight:400; margin-top:2px}
+.prow .c{font-size:22px; font-weight:500; letter-spacing:-.02em; min-width:32px; text-align:right}
+.lg{display:flex; gap:14px; padding:12px 16px; border-top:1px solid var(--line-s); font-size:14.5px; align-items:baseline}
+.list > .lg:first-child{border-top:0}
+.lg .tm{font-size:13px; color:var(--g1); flex:none; min-width:38px}
+.lg b{font-weight:600}
+
+/* ---------- менеджер ---------- */
+.duo{display:grid; grid-template-columns:repeat(auto-fit,minmax(340px,1fr)); gap:22px; align-items:start}
+.stk{display:flex; flex-direction:column; gap:22px}
+.sw{display:inline-flex; align-items:center; gap:10px; cursor:pointer; font-size:14px; color:var(--g1); margin-left:auto}
+.sw input{position:absolute; opacity:0; width:0; height:0}
+.trk{width:40px; height:24px; border-radius:999px; border:1px solid var(--line); position:relative; transition:.15s}
+.trk::after{content:""; position:absolute; top:3px; left:3px; width:16px; height:16px; border-radius:999px; background:var(--g2); transition:.15s}
+.sw input:checked + .trk{border-color:var(--ok); background:var(--ok)}
+.sw input:checked + .trk::after{transform:translateX(16px); background:#fff}
+.spin{
+  width:62px; text-align:center; padding:7px 6px; border-radius:999px;
+  border:1px solid var(--line); background:var(--bg); font-size:14.5px; font-weight:600;
+}
+.spin:focus{border-color:var(--ink); outline:none}
+.names{display:flex; flex-wrap:wrap; gap:7px; padding:14px 16px}
+.nm-chip{font-size:13.5px; padding:5px 13px; border-radius:999px; border:1px solid var(--line); color:var(--g1)}
+.nm-chip.no{border-color:var(--hot); color:var(--hot)}
+.say{padding:0 16px 16px; font-size:14px; color:var(--g1); line-height:1.55}
+.say b{color:var(--ink); font-weight:600}
+
+
+/* ---------- голосование и хотелки ---------- */
+.pq{padding:14px 16px 6px; font-size:15px; font-weight:500; line-height:1.4}
+.pq span{display:block; font-size:13px; color:var(--g1); font-weight:400; margin-top:2px}
+.opt{display:flex; align-items:center; gap:12px; padding:11px 16px; border-top:1px solid var(--line-s); width:100%; text-align:left}
+.opt:hover{background:var(--fill)}
+.opt .ring{width:20px; height:20px; border-radius:999px; border:1.5px solid var(--line); flex:none; display:grid; place-items:center}
+.opt.my .ring{border-color:var(--ink); background:var(--ink)}
+.opt.my .ring::after{content:""; width:7px; height:7px; border-radius:999px; background:var(--bg)}
+.opt .lb{flex:1; min-width:0; font-size:15px}
+.opt .lb .pb{display:block; height:4px; background:var(--fill); border-radius:999px; margin-top:7px; overflow:hidden}
+.opt .lb .pb i{display:block; height:100%; background:var(--ink); border-radius:999px}
+.opt .cnt{font-size:13.5px; color:var(--g1); min-width:28px; text-align:right}
+.opt.my .cnt{color:var(--ink); font-weight:500}
+.wish{display:flex; align-items:center; gap:12px; padding:11px 16px; border-top:1px solid var(--line-s)}
+.list > .wish:first-child{border-top:0}
+.wish .t{flex:1; min-width:0; font-size:15px}
+.wish .t span{display:block; font-size:13px; color:var(--g1)}
+.up{display:inline-flex; align-items:center; gap:6px; padding:5px 12px; border-radius:999px; border:1px solid var(--line); font-size:13.5px; color:var(--g1); flex:none}
+.up:hover{color:var(--ink); border-color:var(--g2)}
+.up.on{border:1.5px solid var(--ink); color:var(--ink); font-weight:500; padding:4.5px 12px}
+.wadd{display:flex; gap:8px; padding:12px 16px; border-top:1px solid var(--line-s)}
+.wadd .inp{flex:1}
+.buy{padding:13px 16px; border-top:1px solid var(--line-s); font-size:14px; color:var(--g1); line-height:1.55}
+.buy b{color:var(--ink); font-weight:500}
+
+/* ---------- тосты ---------- */
+.toasts{position:fixed; left:50%; transform:translateX(-50%); bottom:96px; z-index:80; display:flex; flex-direction:column; gap:8px; width:min(92vw,500px); pointer-events:none}
+.tst{background:var(--ink); color:var(--bg); border-radius:8px; padding:13px 17px; font-size:14px; line-height:1.4; animation:up .18s ease-out}
+.tst b{font-weight:600}
+@keyframes up{from{opacity:0; transform:translateY(8px)}to{opacity:1; transform:none}}
+@media (prefers-reduced-motion:reduce){.tst{animation:none}}
+</style>
+
+<div class="bar">
+  <div class="bar-in">
+    <div class="brand">Обед на смене <span>· прототип</span></div>
+    <div class="pills" role="group" aria-label="Экран">
+      <button class="pill" id="r-crew" aria-pressed="true">Группа</button>
+      <button class="pill" id="r-truck" aria-pressed="false">Фудтрак</button>
+      <button class="pill" id="r-mgr" aria-pressed="false">Менеджер</button>
+    </div>
+    <button class="ic" id="theme" aria-label="Тема"></button>
+    <button class="ic" id="reset" aria-label="Сбросить демо"><svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg></button>
+  </div>
+</div>
+<main id="app"></main>
+<div class="scrim" id="scrim" hidden></div>
+<div class="toasts" id="toasts"></div>
+
+<script>
+"use strict";
+
+const CREW = [
+  {id:"u1",  n:"Александр Назаров", d:"директор группы"},
+  {id:"u2",  n:"Питер Квилл",       d:"режиссёр"},
+  {id:"u3",  n:"Гамора",            d:"1-й ассистент режиссёра"},
+  {id:"u4",  n:"Ракета",            d:"оператор-постановщик"},
+  {id:"u5",  n:"Дракс",             d:"гафер"},
+  {id:"u6",  n:"Грут",              d:"механик камеры"},
+  {id:"u7",  n:"Небула",            d:"2-й режиссёр"},
+  {id:"u8",  n:"Мантис",            d:"художник по гриму"},
+  {id:"u9",  n:"Йонду",             d:"постановщик трюков"},
+  {id:"u10", n:"Крагглин",          d:"бригадир осветителей"},
+  {id:"u11", n:"Космо",             d:"дрессировщик"},
+  {id:"u12", n:"Света Морозова",    d:"художник по костюмам"},
+  {id:"u13", n:"Игорь Пантелеев",   d:"звукорежиссёр"},
+  {id:"u14", n:"Вера Ильина",       d:"продюсерская группа"},
+  {id:"u15", n:"Тимур Бекмамбетов", d:"второй оператор"}
+];
+
+const MENU = [
+  {id:"m1",  c:"Первое",  n:"Борщ со сметаной",      s:"300 мл, сметана отдельно",  lim:20, tg:[]},
+  {id:"m2",  c:"Первое",  n:"Куриная лапша",         s:"домашняя лапша",            lim:16, tg:[]},
+  {id:"m3",  c:"Горячее", n:"Котлета по-киевски",    s:"со сливочным маслом",       lim:14, tg:[]},
+  {id:"m4",  c:"Горячее", n:"Рёбрышки Йонду",        s:"свиные, в остром маринаде", lim:12, tg:[]},
+  {id:"m5",  c:"Горячее", n:"Плов с говядиной",      s:"",                          lim:18, tg:[]},
+  {id:"m6",  c:"Горячее", n:"Овощное рагу",          s:"без мяса и молочного",      lim:12, tg:["пост"]},
+  {id:"m7",  c:"Гарнир",  n:"Картофельное пюре",     s:"",                          lim:24, tg:[]},
+  {id:"m8",  c:"Гарнир",  n:"Гречка с грибами",      s:"",                          lim:20, tg:["вег"]},
+  {id:"m9",  c:"Гарнир",  n:"Рис с овощами",         s:"",                          lim:20, tg:["вег"]},
+  {id:"m10", c:"Салаты",  n:"Салат «Цезарь»",        s:"курица, соус на яйце",      lim:14, tg:[]},
+  {id:"m11", c:"Салаты",  n:"Салат «Я есть Грут»",   s:"руккола, огурец, кинза",    lim:16, tg:["вег"]},
+  {id:"m12", c:"Салаты",  n:"Винегрет",              s:"",                          lim:16, tg:["пост"]},
+  {id:"m13", c:"Напитки", n:"Компот из сухофруктов", s:"",                          lim:40, tg:[]},
+  {id:"m14", c:"Напитки", n:"Сырники со сгущёнкой",  s:"2 шт.",                     lim:12, tg:[]},
+  {id:"m15", c:"Напитки", n:"Ватрушка",              s:"",                          lim:15, tg:[]}
+];
+const CATS = ["Первое","Горячее","Гарнир","Салаты","Напитки"];
+
+const SEED = [
+  {t:"11:42", by:"u7", for:"u7", fn:null, m:"m1",  note:"без сметаны"},
+  {t:"11:42", by:"u7", for:"u7", fn:null, m:"m5",  note:""},
+  {t:"11:42", by:"u7", for:"u7", fn:null, m:"m13", note:""},
+  {t:"11:55", by:"u5", for:"u5", fn:null, m:"m4",  note:"две порции, я мускулистый"},
+  {t:"11:55", by:"u5", for:"u5", fn:null, m:"m7",  note:""},
+  {t:"11:55", by:"u5", for:"u6", fn:null, m:"m11", note:"он на веточной диете"},
+  {t:"11:55", by:"u5", for:"u6", fn:null, m:"m9",  note:""},
+  {t:"11:55", by:"u5", for:null, fn:"Толя, водитель ПТС", m:"m5", note:"с собой в контейнер"},
+  {t:"12:03", by:"u8", for:"u8", fn:null, m:"m11", note:""},
+  {t:"12:03", by:"u8", for:"u8", fn:null, m:"m6",  note:""},
+  {t:"12:03", by:"u8", for:"u3", fn:null, m:"m6",  note:"без грибов"},
+  {t:"12:03", by:"u8", for:"u3", fn:null, m:"m12", note:""},
+  {t:"12:10", by:"u4", for:"u4", fn:null, m:"m2",  note:"погорячее"},
+  {t:"12:10", by:"u4", for:"u4", fn:null, m:"m10", note:""},
+  {t:"12:10", by:"u4", for:null, fn:"массовка, 4 чел.", m:"m1", note:"на всех четверых"}
+];
+
+const ICON = {
+  soup:'<svg viewBox="0 0 24 24"><path d="M3 12h18a9 9 0 0 1-18 0Z"/><path d="M9 4c-.6 1.2.6 1.8 0 3M13 4c-.6 1.2.6 1.8 0 3"/><path d="M7 21h10"/></svg>',
+  noodle:'<svg viewBox="0 0 24 24"><path d="M3 12h18a9 9 0 0 1-18 0Z"/><path d="M7 10c1-3.5 3-3.5 4 0M13 10c1-3.5 3-3.5 4 0"/><path d="M7 21h10"/></svg>',
+  cutlet:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><ellipse cx="12" cy="12.5" rx="5" ry="3.2"/></svg>',
+  ribs:'<svg viewBox="0 0 24 24"><rect x="3.5" y="7" width="17" height="10" rx="5"/><path d="M9 7v10M12 7v10M15 7v10"/></svg>',
+  plov:'<svg viewBox="0 0 24 24"><path d="M3 12h18a9 9 0 0 1-18 0Z"/><path d="M8 9h.01M12 7.5h.01M16 9h.01"/><path d="M7 21h10"/></svg>',
+  pot:'<svg viewBox="0 0 24 24"><path d="M5 9h14v6a4 4 0 0 1-4 4H9a4 4 0 0 1-4-4V9Z"/><path d="M3 9h18M9 6h6"/></svg>',
+  mash:'<svg viewBox="0 0 24 24"><path d="M3 12h18a9 9 0 0 1-18 0Z"/><path d="M6 10.5c2-2.5 4 0 6-2.5s4 0 6 2.5"/><path d="M7 21h10"/></svg>',
+  leaf:'<svg viewBox="0 0 24 24"><path d="M20 4c-8 0-14 5-14 13 8 0 14-5 14-13Z"/><path d="M5 20c3-5 6-8 11-11"/></svg>',
+  cup:'<svg viewBox="0 0 24 24"><path d="M4 8h12v6a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5V8Z"/><path d="M16 10h2a2 2 0 0 1 0 4h-2"/><path d="M4 21h13"/></svg>',
+  bun:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="3"/></svg>'
+};
+const DISH_ICON = {m1:"soup",m2:"noodle",m3:"cutlet",m4:"ribs",m5:"plov",m6:"pot",m7:"mash",m8:"plov",m9:"plov",m10:"leaf",m11:"leaf",m12:"leaf",m13:"cup",m14:"bun",m15:"bun"};
+const ico = id => '<span class="ico">' + ICON[DISH_ICON[id] || "cutlet"] + '</span>';
+
+
+const POLL0 = {q:"Что берём на горячее завтра?", by:"фудтрак", closes:"20:00",
+  opts:[{t:"Солянка сборная", v:["u2","u5","u9","u10"]},{t:"Бефстроганов с пюре", v:["u3","u7","u12"]},{t:"Лагман", v:["u4","u6","u11","u13","u15"]},{t:"Треска в кляре", v:["u8"]}]};
+const WISH0 = [
+  {t:"Нормальный кофе, не растворимый", by:"u4", ups:["u2","u3","u5","u7","u9","u10","u12","u13"]},
+  {t:"Окрошка, пока тепло", by:"u12", ups:["u3","u8","u14","u15"]},
+  {t:"Шаурма в лаваше на ужин в переработку", by:"u5", ups:["u6","u9","u10"]},
+  {t:"Что-нибудь без глютена на гарнир", by:"u14", ups:["u8"]}
+];
+const KEY = "obed-smena-v5";
+const ME = "u1";
+let S, ROLE = "crew", VIEW = "people", SHEET = null, FILTER = "Все";
+
+function fresh(){
+  return {published:true, deadline:"13:00", meal:"14:30",
+    orders:SEED.map((o,i) => ({...o, id:"s"+i})), status:{}, cart:[],
+    poll:JSON.parse(JSON.stringify(POLL0)), wishes:JSON.parse(JSON.stringify(WISH0)),
+    lim:Object.fromEntries(MENU.map(m => [m.id, m.lim]))};
+}
+function load(){ try{ const r = localStorage.getItem(KEY); if(r) return JSON.parse(r); }catch(e){} return fresh(); }
+function save(){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} }
+S = load();
+
+const $ = s => document.querySelector(s);
+const person = id => CREW.find(c => c.id === id);
+const dish = id => MENU.find(m => m.id === id);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const rkey = o => o.for ? o.for : "x:" + o.fn;
+const rname = o => o.for ? person(o.for).n : o.fn;
+const rdept = o => o.for ? person(o.for).d : "нет в списке смены";
+const now = () => new Date().toLocaleTimeString("ru-RU",{hour:"2-digit",minute:"2-digit"});
+const placed = mid => S.orders.filter(o => o.m === mid).length;
+const left = mid => S.lim[mid] - placed(mid) - S.cart.filter(l => l.m === mid).length;
+
+function toast(msg){
+  const el = document.createElement("div");
+  el.className = "tst";
+  el.innerHTML = msg;
+  $("#toasts").appendChild(el);
+  setTimeout(() => el.remove(), 4600);
+}
+
+/* ================= ГРУППА ================= */
+function viewCrew(){
+  const mine = S.orders.filter(o => o.by === ME);
+  let h = '<div class="col"><div class="tt"><h1>Меню на смену</h1>' +
+    '<p>Смена 34 · «Стражи Галактики» · ангар «Милано», Истра</p>' +
+    '<div class="note">Вы — <b>Александр Назаров, директор группы</b>. Заказ можно набрать и себе, и за коллег: каждое блюдо подписано именем.</div></div>';
+
+  h += '<div class="tiles one"><div class="tile lead"><div class="k">Обед на площадке</div><div class="v">' + S.meal + '</div></div></div>' +
+    '<div class="tiles two"><div class="tile"><div class="k">Приём заказов до</div><div class="v">' + S.deadline + '</div></div>' +
+    '<div class="tile"><div class="k">Мои порции</div><div class="v">' + (mine.length + S.cart.length) + '</div></div></div>';
+
+  if(!S.published) return h + '<div class="list"><div class="empty">Меню на смену ещё не выложили. Как выложат — придёт уведомление в бота.</div></div></div>';
+
+  h += '<div class="hd"><h2>Блюда</h2><span class="c">' + MENU.length + ' позиций</span></div>';
+  h += '<div class="frow">' + ["Все"].concat(CATS).map(c =>
+    '<button class="pill" data-f="' + esc(c) + '" aria-pressed="' + (FILTER === c) + '">' + esc(c) + '</button>').join("") + '</div>';
+
+  h += '<div class="list">';
+  CATS.filter(c => FILTER === "Все" || FILTER === c).forEach(cat => {
+    h += '<div class="grp">' + esc(cat) + '</div>';
+    MENU.filter(m => m.c === cat).forEach(m => {
+      const l = left(m.id);
+      const cls = l <= 0 ? "out" : (l <= 3 ? "low" : "");
+      h += '<div class="row">' + ico(m.id) + '<div class="t"><div class="n">' + esc(m.n) +
+        m.tg.map(t => '<span class="mark">' + esc(t) + '</span>').join("") + '</div>' +
+        (m.s ? '<div class="s">' + esc(m.s) + '</div>' : '') + '</div>' +
+        '<span class="rest ' + cls + '">' + (l <= 0 ? "кончилось" : l) + '</span>' +
+        '<button class="plus" data-add="' + m.id + '"' + (l <= 0 ? " disabled" : "") +
+        ' aria-label="Добавить: ' + esc(m.n) + '">+</button></div>';
+    });
+  });
+  h += '</div>';
+
+  h += '<div class="hd"><h2>Заказ</h2><span class="c">' + S.cart.length + ' порц.</span></div><div class="list">';
+  if(!S.cart.length){
+    h += '<div class="empty">Пусто. Нажмите «+» у блюда — спросим, кому оно. Можно отметить сразу нескольких: каждому уйдёт своя строка, и фудтрак увидит имена.</div>';
+  }else{
+    S.cart.forEach((l, i) => {
+      const self = l.for === ME;
+      const nm = self ? "себе" : (l.for ? person(l.for).n : l.fn);
+      h += '<div class="oline"><div class="t"><div class="n">' + esc(dish(l.m).n) + '</div><div class="to">' +
+        '<b class="' + (self ? "me" : "") + '">' + esc(nm) + '</b>' +
+        (self ? "" : ' <span class="dep">· ' + esc(l.for ? person(l.for).d : "нет в списке") + '</span>') +
+        (l.note ? ' <span class="nt">· ' + esc(l.note) + '</span>' : '') +
+        '</div></div><button class="x" data-rm="' + i + '" aria-label="Убрать">×</button></div>';
+    });
+  }
+  h += '</div>';
+
+  if(mine.length){
+    h += '<div class="hd"><h2>Ушло на кухню</h2><span class="c">' + mine.length + ' порц.</span></div><div class="list">';
+    mine.forEach(o => {
+      const self = o.for === ME;
+      h += '<div class="oline"><div class="t"><div class="n">' + esc(dish(o.m).n) + '</div><div class="to">' +
+        '<b class="' + (self ? "me" : "") + '">' + (self ? "себе" : esc(rname(o))) + '</b>' +
+        (o.note ? ' <span class="nt">· ' + esc(o.note) + '</span>' : '') +
+        ' <span class="dep">· ' + o.t + '</span></div></div></div>';
+    });
+    h += '</div>';
+  }
+
+  h += '<div class="hd"><h2>На завтра</h2><span class="c">голосование</span></div>' + pollBlock(true);
+  h += '<div class="hd"><h2>Хочу в меню</h2><span class="c">' + S.wishes.length + ' идей</span></div>' + wishBlock(true);
+  h += '</div>';
+  if(S.cart.length){
+    const to = [...new Set(S.cart.map(l => l.for === ME ? "себе" : (l.for ? person(l.for).n : l.fn)))];
+    h += '<div class="dock"><div class="dock-in"><div class="t"><b>' + S.cart.length + ' порц. в заказе</b>' +
+      '<span>для ' + esc(to.join(", ")) + '</span></div>' +
+      '<button class="btn" id="send">Отправить</button></div></div>';
+  }
+  return h;
+}
+
+
+function pollBlock(edit, extra){
+  const P = S.poll, total = P.opts.reduce((n,o) => n + o.v.length, 0);
+  const mine = P.opts.findIndex(o => o.v.includes(ME));
+  let h = '<div class="list"><div class="pq">' + esc(P.q) + '<span>спрашивает ' + esc(P.by) + ' · до ' + P.closes + ' · ' + total + ' голос' + plural(total) + '</span></div>';
+  P.opts.forEach((o, i) => {
+    const pct = total ? Math.round(o.v.length / total * 100) : 0;
+    const tag = edit ? 'button' : 'div';
+    h += '<' + tag + ' class="opt' + (i === mine ? " my" : "") + '"' + (edit ? ' data-vote="' + i + '"' : '') + '>' +
+      (edit ? '<span class="ring"></span>' : '') +
+      '<span class="lb">' + esc(o.t) + '<span class="pb"><i style="width:' + pct + '%"></i></span></span>' +
+      '<span class="cnt">' + o.v.length + '</span></' + tag + '>';
+  });
+  return h + (extra || '') + '</div>';
+}
+function plural(n){ const m = n % 10, d = n % 100; return (d >= 11 && d <= 14) ? "ов" : m === 1 ? "" : (m >= 2 && m <= 4) ? "а" : "ов"; }
+function wishBlock(edit){
+  const W = [...S.wishes].sort((a,b) => b.ups.length - a.ups.length);
+  let h = '<div class="list">';
+  W.forEach(w => {
+    const i = S.wishes.indexOf(w), on = w.ups.includes(ME);
+    h += '<div class="wish"><div class="t">' + esc(w.t) + '<span>' + esc(w.by === ME ? "вы" : person(w.by).n) + '</span></div>' +
+      (edit ? '<button class="up' + (on ? " on" : "") + '" data-up="' + i + '">▲ ' + w.ups.length + '</button>'
+            : '<span class="up on">▲ ' + w.ups.length + '</span>') + '</div>';
+  });
+  if(edit) h += '<div class="wadd"><input class="inp" id="wtxt" placeholder="Чего не хватает в меню?"><button class="btn line" id="wadd">Добавить</button></div>';
+  return h + '</div>';
+}
+
+/* ================= ФУДТРАК ================= */
+function groups(){
+  const g = {};
+  S.orders.forEach(o => {
+    const k = rkey(o);
+    if(!g[k]) g[k] = {k, name:rname(o), dept:rdept(o), via:new Set(), items:[], t:o.t};
+    g[k].items.push(o);
+    if(o.by !== o.for) g[k].via.add(person(o.by).n);
+    if(o.t < g[k].t) g[k].t = o.t;
+  });
+  return Object.values(g);
+}
+
+function viewTruck(){
+  const gs = groups();
+  const done = gs.filter(g => S.status[g.k] === "done").length;
+  const ready = gs.filter(g => S.status[g.k] === "ready").length;
+  const open = gs.length - done - ready;
+
+  let h = '<div class="wide"><div class="tt"><h1>Кухня</h1>' +
+    '<p>Раздача в ' + S.meal + ' · приём заказов до ' + S.deadline + ' · смена 34</p>' +
+    '<div class="note">Заказы приходят по мере отправки — видно, кому и что откладывать, ещё до раздачи.</div></div>';
+
+  h += '<div class="tiles four">' +
+    '<div class="tile lead"><div class="k">Новые</div><div class="v">' + open + '</div></div>' +
+    '<div class="tile wn"><div class="k">Отложено</div><div class="v">' + ready + '</div></div>' +
+    '<div class="tile ok"><div class="k">Выдано</div><div class="v">' + done + '</div></div>' +
+    '<div class="tile"><div class="k">Порций всего</div><div class="v">' + S.orders.length + '</div></div></div>';
+
+  h += '<div class="frow" style="margin-bottom:16px">' +
+    '<button class="pill" data-v="people" aria-pressed="' + (VIEW === "people") + '">Кому отдавать</button>' +
+    '<button class="pill" data-v="prep" aria-pressed="' + (VIEW === "prep") + '">Что готовить</button>' +
+    '<button class="pill" data-v="log" aria-pressed="' + (VIEW === "log") + '">История</button>' +
+    '<button class="pill" data-v="demand" aria-pressed="' + (VIEW === "demand") + '">Спрос на завтра</button></div>';
+
+  if(VIEW === "people"){
+    h += '<div class="grid">';
+    gs.sort((a,b) => a.t.localeCompare(b.t)).forEach(g => {
+      const st = S.status[g.k] || "new";
+      h += '<div class="tk s-' + st + '"><div class="tk-h"><div class="t"><h3>' + esc(g.name) + '</h3>' +
+        '<div class="r">' + esc(g.dept) + ' · ' + g.t + '</div></div>' +
+        '<span class="stat ' + st + '">' + (st === "new" ? "новый" : st === "ready" ? "отложен" : "выдан") + '</span></div>' +
+        (g.via.size ? '<div class="via">Заказал за него: <b>' + esc([...g.via].join(", ")) + '</b></div>' : '') + '<ul>';
+      g.items.forEach(o => {
+        h += '<li>' + esc(dish(o.m).n) + (o.note ? '<span class="nt">' + esc(o.note) + '</span>' : '') + '</li>';
+      });
+      h += '</ul><div class="tk-f">' +
+        '<button class="' + (st === "ready" ? "on wn" : "") + '" data-st="ready" data-k="' + esc(g.k) + '">Отложил</button>' +
+        '<button class="' + (st === "done" ? "on" : "") + '" data-st="done" data-k="' + esc(g.k) + '">Выдал</button>' +
+        '</div></div>';
+    });
+    h += '</div>';
+  }
+
+  if(VIEW === "prep"){
+    h += '<div class="list">';
+    CATS.forEach(cat => {
+      MENU.filter(m => m.c === cat).forEach(m => {
+        const rows = S.orders.filter(o => o.m === m.id);
+        if(!rows.length) return;
+        const notes = rows.filter(o => o.note).map(o => rname(o) + " — " + o.note);
+        h += '<div class="prow">' + ico(m.id) + '<div class="n">' + esc(m.n) +
+          (notes.length ? '<div class="nt">' + esc(notes.join("  ·  ")) + '</div>' : '') + '</div>' +
+          '<div class="c">' + rows.length + '</div></div>';
+      });
+    });
+    h += '</div>';
+  }
+
+  if(VIEW === "log"){
+    h += '<div class="list">';
+    const seen = {};
+    [...S.orders].sort((a,b) => b.t.localeCompare(a.t)).forEach(o => {
+      const k = o.by + o.t;
+      if(seen[k]) return;
+      seen[k] = 1;
+      const lines = S.orders.filter(x => x.by === o.by && x.t === o.t);
+      const to = [...new Set(lines.map(x => x.for === x.by ? "себе" : rname(x)))];
+      h += '<div class="lg"><span class="tm">' + o.t + '</span><span><b>' + esc(person(o.by).n) + '</b> — ' +
+        lines.length + ' порц. для: ' + esc(to.join(", ")) + '</span></div>';
+    });
+    h += '</div>';
+  }
+  if(VIEW === "demand"){
+    const P = S.poll, total = P.opts.reduce((n,o) => n + o.v.length, 0);
+    const top = [...P.opts].sort((a,b) => b.v.length - a.v.length);
+    const voters = new Set(P.opts.flatMap(o => o.v));
+    const est = o => Math.round(CREW.length * o.v.length / Math.max(total, 1));
+    const buy = '<div class="buy">Если брать по голосам на всю смену (' + CREW.length + ' чел.): <b>' + esc(top[0].t) + ' — ' + est(top[0]) + ' порц.</b>, ' +
+      esc(top[1].t) + ' — ' + est(top[1]) + '. Остальное можно не закупать.</div>';
+    h += '<div class="duo"><div><div class="hd" style="margin-top:0"><h2>Голосование</h2><span class="c">' + voters.size + ' из ' + CREW.length + ' ответили</span></div>' +
+      pollBlock(false, buy) + '</div>';
+    h += '<div><div class="hd" style="margin-top:0"><h2>Хочу в меню</h2><span class="c">по плюсам</span></div>' + wishBlock(false) + '</div></div>';
+  }
+  return h + '</div>';
+}
+
+/* ================= МЕНЕДЖЕР ================= */
+function viewMgr(){
+  const got = new Set(S.orders.map(o => o.for).filter(Boolean));
+  const miss = CREW.filter(c => !got.has(c.id));
+  const guests = [...new Set(S.orders.filter(o => !o.for).map(o => o.fn))];
+
+  let h = '<div class="wide"><div class="tt"><h1>Смена 34</h1>' +
+    '<p>«Стражи Галактики» · ангар «Милано», Истра</p>' +
+    '<div class="note">Меню, лимиты порций, тайминг и кто ещё не заказал.</div></div><div class="duo">';
+
+  h += '<div class="stk"><div><div class="hd" style="margin-top:0"><h2>Меню смены</h2>' +
+    '<label class="sw"><input type="checkbox" id="pub"' + (S.published ? " checked" : "") + '><span class="trk"></span>в эфире</label></div>' +
+    '<div class="list">';
+  CATS.forEach(cat => {
+    h += '<div class="grp">' + esc(cat) + '</div>';
+    MENU.filter(m => m.c === cat).forEach(m => {
+      h += '<div class="row">' + ico(m.id) + '<div class="t"><div class="n">' + esc(m.n) + '</div></div>' +
+        '<span class="rest">' + placed(m.id) + ' зак.</span>' +
+        '<input class="spin" type="number" min="0" value="' + S.lim[m.id] + '" data-lim="' + m.id + '" aria-label="Лимит: ' + esc(m.n) + '"></div>';
+    });
+  });
+  h += '</div><div style="margin-top:14px"><button class="btn w" id="publish">Разослать меню группе</button></div></div></div>';
+
+  h += '<div class="stk"><div><div class="hd" style="margin-top:0"><h2>Кто заказал</h2>' +
+    '<span class="c">' + got.size + ' из ' + CREW.length + '</span></div><div class="list"><div class="names">';
+  CREW.forEach(c => h += '<span class="nm-chip ' + (got.has(c.id) ? "" : "no") + '">' + esc(c.n) + '</span>');
+  h += '</div>';
+  if(miss.length) h += '<div class="say">Ещё не заказали: <b>' + esc(miss.map(c => c.n).join(", ")) + '</b>. Пнуть их в чате смены?</div>';
+  if(guests.length) h += '<div class="say">Вне списка группы: <b>' + esc(guests.join(", ")) + '</b> — за них заказали коллеги.</div>';
+  h += '</div></div>';
+
+  h += '<div><div class="hd" style="margin-top:0"><h2>Тайминг</h2></div><div class="list">' +
+    '<div class="row"><div class="t"><div class="n">Обед на площадке</div></div><input class="spin" type="text" value="' + S.meal + '" data-time="meal" aria-label="Время обеда"></div>' +
+    '<div class="row"><div class="t"><div class="n">Приём заказов до</div></div><input class="spin" type="text" value="' + S.deadline + '" data-time="deadline" aria-label="Дедлайн"></div>' +
+    '<div class="row"><div class="t"><div class="n">Порций заказано</div></div><span class="c" style="font-size:20px;font-weight:700">' + S.orders.length + '</span></div>' +
+    '</div></div></div>';
+
+  return h + '</div></div>';
+}
+
+/* ================= ШТОРКА ================= */
+function openSheet(mid){ SHEET = {mid, sel:new Set(), free:"", note:"", q:""}; drawSheet(); }
+function drawSheet(){
+  const m = dish(SHEET.mid);
+  const q = SHEET.q.toLowerCase().trim();
+  const list = CREW.filter(c => c.id !== ME && (c.n.toLowerCase().includes(q) || c.d.toLowerCase().includes(q)));
+  const n = SHEET.sel.size + (SHEET.free.trim() ? 1 : 0);
+  const cap = left(SHEET.mid);
+  const me = person(ME);
+
+  let h = '<div class="sheet" role="dialog" aria-modal="true" aria-label="Кому это блюдо">' +
+    '<div class="sh-t"><div class="grab"></div><div class="k">' + esc(m.c) + ' · осталось ' + cap + '</div>' +
+    '<h3>' + esc(m.n) + '</h3>' +
+    '<p>Кому эта порция? Отметьте хоть всю бригаду — каждому уйдёт отдельная строка с именем.</p></div>' +
+    '<div class="sh-m">' +
+    '<label class="who self"><input type="checkbox" data-self ' + (SHEET.sel.has(ME) ? "checked" : "") + '>' +
+    '<span class="nm"><b>Себе — ' + esc(me.n) + '</b><span>' + esc(me.d) + '</span></span><span class="tick"></span></label>' +
+    '<div style="padding:10px 0 4px"><input class="inp" id="q" placeholder="Поиск по смене" value="' + esc(SHEET.q) + '"></div>';
+  if(!list.length) h += '<div class="empty" style="padding:16px 2px">Никого не нашли.</div>';
+  list.forEach(c => {
+    h += '<label class="who"><input type="checkbox" data-p="' + c.id + '"' + (SHEET.sel.has(c.id) ? " checked" : "") + '>' +
+      '<span class="nm"><b>' + esc(c.n) + '</b><span>' + esc(c.d) + '</span></span><span class="tick"></span></label>';
+  });
+  h += '<div class="sublbl">Нет в списке смены</div>' +
+    '<input class="inp" id="free" placeholder="Массовка, водитель, гость" value="' + esc(SHEET.free) + '">' +
+    '<div class="sublbl">Пожелание на кухню</div>' +
+    '<input class="inp" id="note" placeholder="Без лука, побольше, с собой" value="' + esc(SHEET.note) + '">' +
+    '<div style="height:18px"></div></div><div class="sh-b">' +
+    '<button class="btn w" id="ok"' + (n === 0 || n > cap ? " disabled" : "") + '>' +
+    (n > cap ? "Порций больше, чем осталось" : "Добавить в заказ" + (n ? " · " + n : "")) + '</button>' +
+    '<button class="btn soft w" id="cancel">Отмена</button></div></div>';
+
+  const sc = $("#scrim"); sc.innerHTML = h; sc.hidden = false;
+}
+function closeSheet(){ SHEET = null; const s = $("#scrim"); s.hidden = true; s.innerHTML = ""; }
+
+/* ================= ТЕМА ================= */
+const SUN = '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M18.7 5.3l-1.4 1.4M6.7 17.3l-1.4 1.4"/></svg>';
+const MOON = '<svg viewBox="0 0 24 24"><path d="M20 14.5A8.2 8.2 0 0 1 9.5 4 8.3 8.3 0 1 0 20 14.5Z"/></svg>';
+function curTheme(){
+  const t = document.documentElement.getAttribute("data-theme");
+  return t || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+}
+try{ const t = localStorage.getItem(KEY + "-theme"); if(t) document.documentElement.setAttribute("data-theme", t); }catch(e){}
+
+/* ================= РЕНДЕР ================= */
+function render(){
+  $("#app").innerHTML = ROLE === "crew" ? viewCrew() : ROLE === "truck" ? viewTruck() : viewMgr();
+  ["crew","truck","mgr"].forEach(r => $("#r-" + r).setAttribute("aria-pressed", ROLE === r));
+  $("#theme").innerHTML = curTheme() === "dark" ? SUN : MOON;
+  save();
+}
+
+document.addEventListener("click", e => {
+  const t = e.target.closest("button");
+  if(!t) return;
+  if(t.id === "r-crew"){ ROLE = "crew"; return render(); }
+  if(t.id === "r-truck"){ ROLE = "truck"; return render(); }
+  if(t.id === "r-mgr"){ ROLE = "mgr"; return render(); }
+  if(t.id === "theme"){
+    const next = curTheme() === "dark" ? "light" : "dark";
+    document.documentElement.setAttribute("data-theme", next);
+    try{ localStorage.setItem(KEY + "-theme", next); }catch(err){}
+    return render();
+  }
+  if(t.id === "reset"){ S = fresh(); closeSheet(); toast("Демо вернулось к началу смены"); return render(); }
+  if(t.dataset.f){ FILTER = t.dataset.f; return render(); }
+  if(t.dataset.add) return openSheet(t.dataset.add);
+  if(t.dataset.rm !== undefined){ S.cart.splice(+t.dataset.rm, 1); return render(); }
+  if(t.id === "send"){
+    const t0 = now();
+    S.cart.forEach((l, i) => S.orders.push({id:"n"+Date.now()+i, t:t0, by:ME, for:l.for, fn:l.fn, m:l.m, note:l.note}));
+    const to = [...new Set(S.cart.map(l => l.for === ME ? "себе" : (l.for ? person(l.for).n : l.fn)))];
+    const cnt = S.cart.length; S.cart = [];
+    toast("<b>Фудтраку:</b> новый заказ от Александра Назарова — " + cnt + " порц. для " + esc(to.join(", ")));
+    return render();
+  }
+  if(t.dataset.v){ VIEW = t.dataset.v; return render(); }
+  if(t.dataset.vote !== undefined){
+    const i = +t.dataset.vote;
+    S.poll.opts.forEach(o => { o.v = o.v.filter(x => x !== ME); });
+    S.poll.opts[i].v.push(ME);
+    return render();
+  }
+  if(t.dataset.up !== undefined){
+    const w = S.wishes[+t.dataset.up];
+    w.ups = w.ups.includes(ME) ? w.ups.filter(x => x !== ME) : w.ups.concat(ME);
+    return render();
+  }
+  if(t.id === "wadd"){
+    const v = ($("#wtxt").value || "").trim();
+    if(!v) return;
+    S.wishes.push({t:v, by:ME, ups:[]});
+    toast("Фудтрак увидит это в «Спросе на завтра»");
+    return render();
+  }
+  if(t.dataset.st){
+    const k = t.dataset.k;
+    S.status[k] = (S.status[k] === t.dataset.st) ? "new" : t.dataset.st;
+    if(S.status[k] === "done") toast("Обед выдан — отметка ушла в чат смены");
+    return render();
+  }
+  if(t.id === "publish"){ S.published = true; toast("Меню на смену 34 разослано " + CREW.length + " участникам"); return render(); }
+  if(t.id === "cancel") return closeSheet();
+  if(t.id === "ok"){
+    const m = SHEET.mid, note = SHEET.note.trim();
+    SHEET.sel.forEach(id => S.cart.push({m, for:id, fn:null, note}));
+    if(SHEET.free.trim()) S.cart.push({m, for:null, fn:SHEET.free.trim(), note});
+    closeSheet(); return render();
+  }
+});
+
+document.addEventListener("change", e => {
+  const el = e.target;
+  if(el.dataset.self !== undefined && SHEET){ el.checked ? SHEET.sel.add(ME) : SHEET.sel.delete(ME); return drawSheet(); }
+  if(el.dataset.p && SHEET){ el.checked ? SHEET.sel.add(el.dataset.p) : SHEET.sel.delete(el.dataset.p); return drawSheet(); }
+  if(el.id === "pub"){ S.published = el.checked; return render(); }
+  if(el.dataset.lim){ S.lim[el.dataset.lim] = Math.max(0, +el.value || 0); return render(); }
+  if(el.dataset.time){ S[el.dataset.time] = el.value; save(); }
+});
+
+document.addEventListener("input", e => {
+  if(!SHEET) return;
+  if(e.target.id === "q"){
+    SHEET.q = e.target.value; const p = e.target.selectionStart; drawSheet();
+    const q = $("#q"); if(q){ q.focus(); q.setSelectionRange(p, p); }
+  }
+  if(e.target.id === "free") SHEET.free = e.target.value;
+  if(e.target.id === "note") SHEET.note = e.target.value;
+});
+
+$("#scrim").addEventListener("click", e => { if(e.target.id === "scrim") closeSheet(); });
+document.addEventListener("keydown", e => { if(e.key === "Escape" && SHEET) closeSheet(); });
+try{ if(window.Telegram && window.Telegram.WebApp){ window.Telegram.WebApp.ready(); window.Telegram.WebApp.expand(); } }catch(err){}
+render();
+</script>

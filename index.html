@@ -1,3 +1,8 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Обед на смене</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -252,7 +257,103 @@ main{padding:22px 20px 120px}
 .tst b{font-weight:600}
 @keyframes up{from{opacity:0; transform:translateY(8px)}to{opacity:1; transform:none}}
 @media (prefers-reduced-motion:reduce){.tst{animation:none}}
+
+/* ---------- мобильные экраны ---------- */
+@media (max-width:600px){
+  body{font-size:14px; overflow-wrap:anywhere}
+
+  .bar-in{
+    padding:10px 16px 9px;
+    display:grid;
+    grid-template-columns:minmax(0,1fr) auto auto;
+    gap:8px;
+  }
+  .brand{min-width:0; margin:0; align-self:center; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+  .pills{
+    grid-column:1 / -1;
+    grid-row:2;
+    min-width:0;
+    width:100%;
+    overflow-x:auto;
+    scrollbar-width:none;
+    -webkit-overflow-scrolling:touch;
+  }
+  .pills::-webkit-scrollbar{display:none}
+  .pill{min-height:40px; padding:8px 14px}
+  .pill[aria-pressed="true"]{padding:7.5px 14px}
+  .ic{width:40px; height:40px}
+
+  main{padding:20px 16px calc(120px + env(safe-area-inset-bottom))}
+  .tt{margin-bottom:18px}
+  .tt h1{font-size:30px}
+  .tt p{font-size:14px}
+  .tt .note{margin-top:10px}
+
+  .tiles{gap:8px; margin-bottom:20px}
+  .tiles.four{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .tile{min-width:0; padding:13px 14px 14px}
+  .tile.lead{padding:12px 13px 13px}
+  .tile .v{font-size:27px}
+
+  .hd{gap:8px; margin:24px 0 10px}
+  .hd h2{font-size:19px}
+  .hd .c{font-size:13px; text-align:right}
+  .frow{gap:6px}
+
+  .grid,.duo{grid-template-columns:minmax(0,1fr)}
+  .duo{gap:20px}
+  .stk{gap:20px; min-width:0}
+  .list,.tk{min-width:0}
+  .row{gap:10px; padding:12px}
+  .grp{padding-left:12px; padding-right:12px}
+  .row .n,.prow .n{font-size:14.5px}
+  .rest{font-size:12px}
+  .ico{width:36px; height:36px}
+  .plus,.x{width:40px; height:40px}
+  .stat{padding:4px 9px}
+  .tk-h{padding:14px 14px 11px}
+  .tk .via{padding-left:14px; padding-right:14px}
+  .tk li{padding:10px 14px}
+  .tk-f{padding:11px 14px 13px}
+  .prow{gap:10px; padding:12px}
+
+  .sw{flex:none; white-space:nowrap; gap:8px; font-size:13px}
+  .spin{width:58px; flex:none}
+  .names{padding:13px 12px}
+  .say{padding-left:12px; padding-right:12px}
+
+  .wadd{padding:12px; gap:7px}
+  .wadd .inp{min-width:0}
+  .wadd .btn{flex:none; padding-left:16px; padding-right:16px}
+
+  .dock-in{padding:10px 16px calc(12px + env(safe-area-inset-bottom)); gap:10px}
+  .dock .t b{font-size:14px}
+  .dock .btn{padding-left:18px; padding-right:18px}
+  .toasts{bottom:calc(86px + env(safe-area-inset-bottom))}
+
+  .scrim{height:100dvh}
+  .sheet{max-height:calc(100dvh - env(safe-area-inset-top)); border-left:0; border-right:0}
+  .sh-t{padding:9px 16px 14px}
+  .sh-m{padding:0 16px}
+  .sh-b{padding:12px 16px calc(14px + env(safe-area-inset-bottom))}
+  .who{min-height:48px}
+  .inp{min-height:44px}
+}
+
+@media (max-width:359px){
+  .bar-in{padding-left:12px; padding-right:12px}
+  .pill{padding-left:12px; padding-right:12px}
+  .pill[aria-pressed="true"]{padding-left:12px; padding-right:12px}
+  main{padding-left:12px; padding-right:12px}
+  .tiles.two{gap:7px}
+  .tile{padding-left:12px; padding-right:12px}
+  .tile .k{font-size:12.5px}
+  .tile .v{font-size:26px}
+}
 </style>
+</head>
+
+<body>
 
 <div class="bar">
   <div class="bar-in">
@@ -760,3 +861,5 @@ document.addEventListener("keydown", e => { if(e.key === "Escape" && SHEET) clos
 try{ if(window.Telegram && window.Telegram.WebApp){ window.Telegram.WebApp.ready(); window.Telegram.WebApp.expand(); } }catch(err){}
 render();
 </script>
+</body>
+</html>
